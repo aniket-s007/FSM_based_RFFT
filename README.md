@@ -79,7 +79,7 @@ A real-time **N=16 FFT spectrum analyzer** implemented on a Digilent Nexys 4 FPG
 
 1. Press **BTNC** to trigger a capture.
 2. The FSM loads 16 samples (from ROM or LFSR) into the RFFT core.
-3. The radix-2 DIF FFT computes 4 butterfly stages (~60 clock cycles at 100 MHz).
+3. The radix-2 DIF FFT computes 4 butterfly stages (~60 clock cycles at 80 MHz).
 4. Nine magnitude approximations run combinationally on the output bins.
 5. Results are latched and displayed as vertical bars on VGA (640×480 @ 60 Hz).
 6. LEDs LD0–LD8 light up for any bin whose magnitude exceeds 512 (threshold for real signal energy vs. rounding noise).
