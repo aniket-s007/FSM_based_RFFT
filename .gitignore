@@ -1,0 +1,39 @@
+# ============================================================
+# Vivado project — ignore all generated build artifacts
+# ============================================================
+
+# Vivado cache / working tree state
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+
+# Synthesis & implementation run outputs
+*.runs/
+
+# Synthesis checkpoint placed in utils_1 (auto-regenerated)
+*.srcs/utils_1/
+
+# Vivado journal and log files
+*.jou
+*.log
+*.str
+
+# Vivado backup / lock files
+*.bak
+.Xil/
+.metadata/
+
+# Vivado webtalk
+*webtalk*
+
+# OS junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# ============================================================
+# Explicitly track the pre-built bitstream for quick testing
+# (override the *.runs/ exclusion above)
+# ============================================================
+!bitstream/
