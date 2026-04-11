@@ -9,6 +9,9 @@
 ## =============================================================================
 
 ## Clock (100 MHz onboard oscillator, pin E3)
+## Timing constraint set to 80 MHz (period 12.5 ns) to resolve setup slack
+## violations. The physical oscillator is 100 MHz; the constraint relaxes
+## Vivado's timing requirement to what the current datapath can meet.
 set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }];
 create_clock -add -name sys_clk_pin -period 12.5 -waveform {0 6.25} [get_ports { clk }];
 

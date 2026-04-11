@@ -35,7 +35,7 @@
 // For FPGA:
 //   - Uses ~16 registers + a few DSP48 slices for multiplication
 //   - Fits trivially on Artix-7 (xc7a100t has 240 DSP slices)
-//   - Runs at 100 MHz easily
+//   - Clock constrained to 80 MHz (12.5 ns period) to meet setup slack
 //=============================================================================
 
 module rfft_demo_top (

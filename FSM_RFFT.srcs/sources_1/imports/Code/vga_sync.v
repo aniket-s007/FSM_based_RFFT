@@ -5,8 +5,13 @@
 //
 // VGA timing generator for 640×480 @ 60 Hz.
 //
-// Input: 100 MHz system clock (Nexys A7 onboard oscillator).
+// Input: 100 MHz physical oscillator (timing constraint set to 80 MHz).
 // Internally generates 25 MHz pixel clock using a clock-enable toggle.
+//
+// NOTE: The pixel clock divider (clk_div, divide-by-4) uses the physical
+// 100 MHz oscillator frequency, giving 100/4 = 25 MHz as intended.
+// The 80 MHz timing constraint only affects Vivado's slack analysis,
+// not the actual clock frequency seen by this module at runtime.
 //
 // Timing (industry standard VESA 640×480 @ 60 Hz):
 //   Horizontal: 640 visible + 16 FP + 96 sync + 48 BP = 800 total
@@ -25,7 +30,7 @@
 //=============================================================================
 
 module vga_sync (
-    input  wire        clk,       // 100 MHz system clock
+    input  wire        clk,       // 100 MHz physical clock (constrained to 80 MHz)
     input  wire        rst_n,     // Active-low reset
     output reg  [9:0]  h_count,   // 0-799
     output reg  [9:0]  v_count,   // 0-524
@@ -59,7 +64,7 @@ module vga_sync (
     localparam V_SYNC_END   = V_SYNC_START + V_SYNC;    // 492
 
     //=========================================================================
-    // 25 MHz pixel clock generation from 100 MHz
+    // 25 MHz pixel clock generation from 100 MHz physical oscillator
     //
     // We use a 2-bit counter dividing by 4:
     //   100 MHz / 4 = 25 MHz.
