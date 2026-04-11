@@ -6,7 +6,7 @@
 // Board-level top module for the RFFT Spectrum Analyzer on Nexys 4.
 //
 // Architecture:
-//   100 MHz clk → [rfft_demo_top] → bar_heights
+//   100 MHz osc (constrained to 80 MHz) → [rfft_demo_top] → bar_heights
 //                  [vga_sync]      → timing signals
 //                  [bar_renderer]  → RGB out
 //

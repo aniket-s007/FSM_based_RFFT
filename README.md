@@ -142,5 +142,5 @@ FSM_RFFT/
 | Board | Digilent Nexys 4 Rev B |
 | FPGA | Xilinx Artix-7 XC7A100T-1CSG324C |
 | Tool | Vivado (Xilinx/AMD) |
-| Clock | 100 MHz |
+| Clock | 100 MHz oscillator (timing constrained to 80 MHz) |
 | VGA | 640×480 @ 60 Hz |
