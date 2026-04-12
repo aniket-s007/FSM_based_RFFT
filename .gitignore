@@ -27,6 +27,9 @@
 # Vivado webtalk
 *webtalk*
 
+# Claude Code internal directory
+.claude/
+
 # OS junk
 Thumbs.db
 .DS_Store
