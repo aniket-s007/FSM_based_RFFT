@@ -58,7 +58,7 @@
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
-    <Option Name="WTXSimLaunchSim" Val="0"/>
+    <Option Name="WTXSimLaunchSim" Val="11"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -89,8 +89,45 @@
   <FileSets Version="1" Minor="32">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/imports/Code/clock_divider.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/clock_divider.v"/>
+          <Attr Name="ImportTime" Val="1776016430"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Code/horizontal_counter.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/horizontal_counter.v"/>
+          <Attr Name="ImportTime" Val="1776016432"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Code/vertical_counter.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/vertical_counter.v"/>
+          <Attr Name="ImportTime" Val="1776016434"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/Code/vga_sync.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/vga_sync.v"/>
+          <Attr Name="ImportTime" Val="1776016430"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/bar_renderer.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/bar_renderer.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -100,6 +137,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/lfsr16.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/lfsr16.v"/>
           <Attr Name="ImportTime" Val="1775904320"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -109,6 +147,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/magnitude_approx.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/magnitude_approx.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -118,6 +157,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/rfft_demo_top.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/rfft_demo_top.v"/>
           <Attr Name="ImportTime" Val="1775904412"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -127,6 +167,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/rfft_n16_simple.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/rfft_n16_simple.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -136,16 +177,8 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/test_signal_rom.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/test_signal_rom.v"/>
-          <Attr Name="ImportTime" Val="1775727616"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/Code/vga_sync.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/vga_sync.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -154,6 +187,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/fpga_top.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/fpga_top.v"/>
           <Attr Name="ImportTime" Val="1775904437"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -163,8 +197,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="fpga_top"/>
-        <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="TopModule" Val="vga_sync"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
@@ -183,11 +216,29 @@
     </FileSet>
     <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1" RelGenDir="$PGENDIR/sim_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sim_1/imports/Simulation/tb_vga_sync.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Simulation/tb_vga_sync.v"/>
+          <Attr Name="ImportTime" Val="1776016437"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/imports/Simulation/tb_bar_renderer.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Simulation/tb_bar_renderer.v"/>
+          <Attr Name="ImportTime" Val="1775740659"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="fpga_top"/>
+        <Option Name="TopModule" Val="tb_vga_sync"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
-        <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
@@ -236,17 +287,16 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="22">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="true" IncrementalCheckpoint="$PSRCDIR/utils_1/imports/synth_1/fpga_top.dcp" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/synth_1" ParallelReportGen="true">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="true" IncrementalCheckpoint="$PSRCDIR/utils_1/imports/synth_1/fpga_top.dcp" WriteIncrSynthDcp="false" State="current" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/synth_1" ParallelReportGen="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025"/>
         <Step Id="synth_design"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2025"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1" LaunchOptions="-jobs 12 " AutoRQSDir="$PSRCDIR/utils_1/imports/impl_1" ParallelReportGen="true">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1" LaunchOptions="-jobs 12 " AutoRQSDir="$PSRCDIR/utils_1/imports/impl_1" ParallelReportGen="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025"/>
         <Step Id="init_design"/>
@@ -259,7 +309,6 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2025"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
