@@ -10,9 +10,7 @@
 //   [horizontal_counter]→ H_Count_Value (0-799), enable_V_Counter
 //   [vertical_counter]  → V_Count_Value (0-524)
 //
-// Based on SimplyEmbedded modular VGA approach, adapted to preserve the
-// EXACT SAME PORT INTERFACE as the original vga_sync so that fpga_top.v
-// and bar_renderer.v require zero changes.
+// Based on SimplyEmbedded (youtube) VGA approach
 //
 // Timing (VESA 640×480 @ 60 Hz):
 //   Horizontal: 640 visible + 16 FP + 96 sync + 48 BP = 800 total
