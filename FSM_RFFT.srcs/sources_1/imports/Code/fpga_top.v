@@ -113,6 +113,18 @@ module fpga_top (
     );
 
     //=========================================================================
+    // Text overlay (labels, bin numbers, magnitude ticks, axis titles)
+    //=========================================================================
+    wire [3:0] final_r, final_g, final_b;
+
+    text_overlay text_ovl (
+        .h_count(h_count), .v_count(v_count),
+        .video_active(video_active),
+        .bg_r(render_r), .bg_g(render_g), .bg_b(render_b),
+        .vga_r(final_r), .vga_g(final_g), .vga_b(final_b)
+    );
+
+    //=========================================================================
     // VGA output registration
     //=========================================================================
     reg [3:0] vga_r_reg, vga_g_reg, vga_b_reg;
@@ -123,9 +135,9 @@ module fpga_top (
             vga_g_reg <= 4'h0;
             vga_b_reg <= 4'h0;
         end else if (pixel_tick) begin
-            vga_r_reg <= render_r;
-            vga_g_reg <= render_g;
-            vga_b_reg <= render_b;
+            vga_r_reg <= final_r;
+            vga_g_reg <= final_g;
+            vga_b_reg <= final_b;
         end
     end
 
