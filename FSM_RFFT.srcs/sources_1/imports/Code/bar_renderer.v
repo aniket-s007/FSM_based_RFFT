@@ -35,11 +35,11 @@
 //=============================================================================
 
 module bar_renderer (
-    input  wire [9:0]  h_count,
-    input  wire [9:0]  v_count,
-    input  wire        video_active,
+    input  wire [9:0]  h_count, // Current pixel coordinates from vga_sync
+    input  wire [9:0]  v_count, // Current pixel coordinates from vga_sync
+    input  wire        video_active,    // High only in visible 640×480 area
 
-    // 9 bar heights (unsigned 16-bit magnitudes)
+    // 9 bar heights (unsigned 16-bit magnitudes) from rfft_demo_top output
     input  wire [15:0] bar_height_0,
     input  wire [15:0] bar_height_1,
     input  wire [15:0] bar_height_2,
@@ -50,30 +50,30 @@ module bar_renderer (
     input  wire [15:0] bar_height_7,
     input  wire [15:0] bar_height_8,
 
-    output reg  [3:0]  vga_r,
-    output reg  [3:0]  vga_g,
-    output reg  [3:0]  vga_b
+    output reg  [3:0]  vga_r,   // 12-bit color to VGA DAC
+    output reg  [3:0]  vga_g,   // 12-bit color to VGA DAC
+    output reg  [3:0]  vga_b    // 12-bit color to VGA DAC
 );
 
     //=========================================================================
     // Layout parameters
     //=========================================================================
-    localparam LEFT_MARGIN  = 10'd20;
-    localparam BAR_WIDTH    = 10'd56;
-    localparam GAP_WIDTH    = 10'd12;
-    localparam BAR_STRIDE   = 10'd68;   // BAR_WIDTH + GAP_WIDTH
+    localparam LEFT_MARGIN  = 10'd44;   //Bars start further right
+    localparam BAR_WIDTH    = 10'd52;   // Width of each bar
+    localparam GAP_WIDTH    = 10'd10;   // Gap between bars, gaps slightly smaller
+    localparam BAR_STRIDE   = 10'd62;   // BAR_WIDTH + GAP_WIDTH
     localparam NUM_BARS     = 4'd9;
 
-    // Vertical bar area
-    localparam BAR_TOP      = 10'd40;   // Topmost pixel a bar can reach
-    localparam BAR_BOTTOM   = 10'd459;  // Bottom of bar area
-    localparam BAR_MAX_PX   = 10'd420;  // BAR_BOTTOM - BAR_TOP + 1
+    // Vertical bar limits
+    localparam BAR_TOP      = 10'd16;   // Topmost pixel a bar can reach, (leave 16 px from top)
+    localparam BAR_BOTTOM   = 10'd447;  // Bottom of bar 
+    localparam BAR_MAX_PX   = 10'd432;  // BAR_BOTTOM - BAR_TOP + 1
 
     // Baseline strip
-    localparam BASELINE_TOP = 10'd460;
+    localparam BASELINE_TOP = 10'd448;
 
     //=========================================================================
-    // Determine which bar (if any) the current pixel is inside
+    // Determine which bar (if any) the current pixel is inside 
     //=========================================================================
     // Horizontal position relative to left margin
     wire [9:0] h_rel = h_count - LEFT_MARGIN;
@@ -90,18 +90,18 @@ module bar_renderer (
         bar_idx = 4'd0;
         in_bar  = 1'b0;
 
-        if (h_count >= LEFT_MARGIN && h_count < LEFT_MARGIN + NUM_BARS * BAR_STRIDE) begin
+        if (h_count >= LEFT_MARGIN && h_count < LEFT_MARGIN + 10'd558) begin // Total bar span: 9 × 62 = 558 px, hardcoded as 10'd558 in the boundary check.
             // Determine bar index by comparing h_rel against bar boundaries
             // Bar k occupies: LEFT_MARGIN + k*68 to LEFT_MARGIN + k*68 + 55
-            if      (h_rel < 1*BAR_STRIDE) begin bar_idx = 4'd0; in_bar = (h_rel < BAR_WIDTH); end
-            else if (h_rel < 2*BAR_STRIDE) begin bar_idx = 4'd1; in_bar = (h_rel - 1*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 3*BAR_STRIDE) begin bar_idx = 4'd2; in_bar = (h_rel - 2*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 4*BAR_STRIDE) begin bar_idx = 4'd3; in_bar = (h_rel - 3*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 5*BAR_STRIDE) begin bar_idx = 4'd4; in_bar = (h_rel - 4*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 6*BAR_STRIDE) begin bar_idx = 4'd5; in_bar = (h_rel - 5*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 7*BAR_STRIDE) begin bar_idx = 4'd6; in_bar = (h_rel - 6*BAR_STRIDE < BAR_WIDTH); end
-            else if (h_rel < 8*BAR_STRIDE) begin bar_idx = 4'd7; in_bar = (h_rel - 7*BAR_STRIDE < BAR_WIDTH); end
-            else                           begin bar_idx = 4'd8; in_bar = (h_rel - 8*BAR_STRIDE < BAR_WIDTH); end
+            if      (h_rel < 10'd62)  begin bar_idx = 4'd0; in_bar = (h_rel < 10'd52); end
+            else if (h_rel < 10'd124) begin bar_idx = 4'd1; in_bar = (h_rel - 10'd62  < 10'd52); end
+            else if (h_rel < 10'd186) begin bar_idx = 4'd2; in_bar = (h_rel - 10'd124 < 10'd52); end
+            else if (h_rel < 10'd248) begin bar_idx = 4'd3; in_bar = (h_rel - 10'd186 < 10'd52); end
+            else if (h_rel < 10'd310) begin bar_idx = 4'd4; in_bar = (h_rel - 10'd248 < 10'd52); end
+            else if (h_rel < 10'd372) begin bar_idx = 4'd5; in_bar = (h_rel - 10'd310 < 10'd52); end
+            else if (h_rel < 10'd434) begin bar_idx = 4'd6; in_bar = (h_rel - 10'd372 < 10'd52); end
+            else if (h_rel < 10'd496) begin bar_idx = 4'd7; in_bar = (h_rel - 10'd434 < 10'd52); end
+            else                      begin bar_idx = 4'd8; in_bar = (h_rel - 10'd496 < 10'd52); end
         end
     end
 
@@ -131,29 +131,32 @@ module bar_renderer (
     // bar_height >> 6 gives a range of 0-1023 for 16-bit input.
     // Clamp to BAR_MAX_PX (420).
     //=========================================================================
-    wire [9:0] scaled_height_raw = current_bar_height[15:6]; // 0-1023
-    wire [9:0] scaled_height = (scaled_height_raw > BAR_MAX_PX) ? BAR_MAX_PX : scaled_height_raw;
+    wire [9:0] scaled_height_raw = current_bar_height[15:6]; // 0-1023 ie. scaled by 1/64
+    wire [9:0] scaled_height = (scaled_height_raw > BAR_MAX_PX) ? BAR_MAX_PX : scaled_height_raw; // Final pixel height of the bar
 
     // Bar top pixel position (bar grows upward from BAR_BOTTOM)
-    wire [9:0] bar_top_y = BAR_BOTTOM - scaled_height + 10'd1;
+    wire [9:0] bar_top_y = BAR_BOTTOM - scaled_height + 10'd1; 
 
     //=========================================================================
     // Pixel color assignment
     //=========================================================================
     always @(*) begin
-        if (!video_active) begin
+        if (!video_active) 
+        begin
             // Blanking: must output black (VGA standard)
             vga_r = 4'h0;
             vga_g = 4'h0;
             vga_b = 4'h0;
         end
-        else if (v_count >= BASELINE_TOP) begin
+        else if (v_count >= BASELINE_TOP) 
+        begin
             // Bottom baseline strip: dark gray
             vga_r = 4'h2;
             vga_g = 4'h2;
             vga_b = 4'h2;
-        end
-        else if (in_bar && v_count >= bar_top_y && v_count <= BAR_BOTTOM) begin
+        end     
+        else if (in_bar && v_count >= bar_top_y && v_count <= BAR_BOTTOM)    
+        begin 
             // Inside a bar: use color based on bar index
             case (bar_idx)
                 4'd0: begin  // DC bin: blue
@@ -168,7 +171,8 @@ module bar_renderer (
                 end
             endcase
         end
-        else begin
+        else 
+        begin
             // Background: black
             vga_r = 4'h0;
             vga_g = 4'h0;
