@@ -39,7 +39,7 @@ module bar_renderer (
     input  wire [9:0]  v_count, // Current pixel coordinates from vga_sync
     input  wire        video_active,    // High only in visible 640×480 area
 
-    // 9 bar heights (unsigned 16-bit magnitudes) from rfft_demo_top output
+    // 16 bar heights (unsigned 16-bit magnitudes) from rfft_demo_top output
     input  wire [15:0] bar_height_0,
     input  wire [15:0] bar_height_1,
     input  wire [15:0] bar_height_2,
@@ -49,6 +49,13 @@ module bar_renderer (
     input  wire [15:0] bar_height_6,
     input  wire [15:0] bar_height_7,
     input  wire [15:0] bar_height_8,
+    input  wire [15:0] bar_height_9,
+    input  wire [15:0] bar_height_10,
+    input  wire [15:0] bar_height_11,
+    input  wire [15:0] bar_height_12,
+    input  wire [15:0] bar_height_13,
+    input  wire [15:0] bar_height_14,
+    input  wire [15:0] bar_height_15,
 
     output reg  [3:0]  vga_r,   // 12-bit color to VGA DAC
     output reg  [3:0]  vga_g,   // 12-bit color to VGA DAC
@@ -58,11 +65,11 @@ module bar_renderer (
     //=========================================================================
     // Layout parameters
     //=========================================================================
-    localparam LEFT_MARGIN  = 10'd44;   //Bars start further right
-    localparam BAR_WIDTH    = 10'd52;   // Width of each bar
-    localparam GAP_WIDTH    = 10'd10;   // Gap between bars, gaps slightly smaller
-    localparam BAR_STRIDE   = 10'd62;   // BAR_WIDTH + GAP_WIDTH
-    localparam NUM_BARS     = 4'd9;
+    localparam LEFT_MARGIN  = 10'd44;   // Room for Y-axis labels
+    localparam BAR_WIDTH    = 10'd30;   // Narrower to fit 16 bars
+    localparam GAP_WIDTH    = 10'd6;    // Tight gap
+    localparam BAR_STRIDE   = 10'd36;   // BAR_WIDTH + GAP_WIDTH
+    localparam NUM_BARS     = 5'd16;
 
     // Vertical bar limits
     localparam BAR_TOP      = 10'd16;   // Topmost pixel a bar can reach, (leave 16 px from top)
@@ -80,9 +87,9 @@ module bar_renderer (
 
     // Bar index and position within bar stride
     // bar_idx = h_rel / BAR_STRIDE, pos_in_stride = h_rel % BAR_STRIDE
-    // For 9 bars, bar_idx valid range is 0-8
+    // For 16 bars, bar_idx valid range is 0-15
     //
-    // Division by 68 is expensive. Instead, use a cascaded compare:
+    // Division by 36 is expensive. Instead, use a cascaded compare:
     reg [3:0] bar_idx;
     reg       in_bar;   // Whether current pixel is within a bar column
 
@@ -90,18 +97,25 @@ module bar_renderer (
         bar_idx = 4'd0;
         in_bar  = 1'b0;
 
-        if (h_count >= LEFT_MARGIN && h_count < LEFT_MARGIN + 10'd558) begin // Total bar span: 9 × 62 = 558 px, hardcoded as 10'd558 in the boundary check.
-            // Determine bar index by comparing h_rel against bar boundaries
-            // Bar k occupies: LEFT_MARGIN + k*68 to LEFT_MARGIN + k*68 + 55
-            if      (h_rel < 10'd62)  begin bar_idx = 4'd0; in_bar = (h_rel < 10'd52); end
-            else if (h_rel < 10'd124) begin bar_idx = 4'd1; in_bar = (h_rel - 10'd62  < 10'd52); end
-            else if (h_rel < 10'd186) begin bar_idx = 4'd2; in_bar = (h_rel - 10'd124 < 10'd52); end
-            else if (h_rel < 10'd248) begin bar_idx = 4'd3; in_bar = (h_rel - 10'd186 < 10'd52); end
-            else if (h_rel < 10'd310) begin bar_idx = 4'd4; in_bar = (h_rel - 10'd248 < 10'd52); end
-            else if (h_rel < 10'd372) begin bar_idx = 4'd5; in_bar = (h_rel - 10'd310 < 10'd52); end
-            else if (h_rel < 10'd434) begin bar_idx = 4'd6; in_bar = (h_rel - 10'd372 < 10'd52); end
-            else if (h_rel < 10'd496) begin bar_idx = 4'd7; in_bar = (h_rel - 10'd434 < 10'd52); end
-            else                      begin bar_idx = 4'd8; in_bar = (h_rel - 10'd496 < 10'd52); end
+        if (h_count >= LEFT_MARGIN && h_count < LEFT_MARGIN + 10'd576) begin
+            // 16 bars × 36px stride = 576px total span
+            // Bar k occupies: h_rel in [k*36 .. k*36+29]
+            if      (h_rel < 10'd36)  begin bar_idx = 4'd0;  in_bar = (h_rel < 10'd30); end
+            else if (h_rel < 10'd72)  begin bar_idx = 4'd1;  in_bar = (h_rel - 10'd36  < 10'd30); end
+            else if (h_rel < 10'd108) begin bar_idx = 4'd2;  in_bar = (h_rel - 10'd72  < 10'd30); end
+            else if (h_rel < 10'd144) begin bar_idx = 4'd3;  in_bar = (h_rel - 10'd108 < 10'd30); end
+            else if (h_rel < 10'd180) begin bar_idx = 4'd4;  in_bar = (h_rel - 10'd144 < 10'd30); end
+            else if (h_rel < 10'd216) begin bar_idx = 4'd5;  in_bar = (h_rel - 10'd180 < 10'd30); end
+            else if (h_rel < 10'd252) begin bar_idx = 4'd6;  in_bar = (h_rel - 10'd216 < 10'd30); end
+            else if (h_rel < 10'd288) begin bar_idx = 4'd7;  in_bar = (h_rel - 10'd252 < 10'd30); end
+            else if (h_rel < 10'd324) begin bar_idx = 4'd8;  in_bar = (h_rel - 10'd288 < 10'd30); end
+            else if (h_rel < 10'd360) begin bar_idx = 4'd9;  in_bar = (h_rel - 10'd324 < 10'd30); end
+            else if (h_rel < 10'd396) begin bar_idx = 4'd10; in_bar = (h_rel - 10'd360 < 10'd30); end
+            else if (h_rel < 10'd432) begin bar_idx = 4'd11; in_bar = (h_rel - 10'd396 < 10'd30); end
+            else if (h_rel < 10'd468) begin bar_idx = 4'd12; in_bar = (h_rel - 10'd432 < 10'd30); end
+            else if (h_rel < 10'd504) begin bar_idx = 4'd13; in_bar = (h_rel - 10'd468 < 10'd30); end
+            else if (h_rel < 10'd540) begin bar_idx = 4'd14; in_bar = (h_rel - 10'd504 < 10'd30); end
+            else                      begin bar_idx = 4'd15; in_bar = (h_rel - 10'd540 < 10'd30); end
         end
     end
 
@@ -112,15 +126,22 @@ module bar_renderer (
 
     always @(*) begin
         case (bar_idx)
-            4'd0: current_bar_height = bar_height_0;
-            4'd1: current_bar_height = bar_height_1;
-            4'd2: current_bar_height = bar_height_2;
-            4'd3: current_bar_height = bar_height_3;
-            4'd4: current_bar_height = bar_height_4;
-            4'd5: current_bar_height = bar_height_5;
-            4'd6: current_bar_height = bar_height_6;
-            4'd7: current_bar_height = bar_height_7;
-            4'd8: current_bar_height = bar_height_8;
+            4'd0:  current_bar_height = bar_height_0;
+            4'd1:  current_bar_height = bar_height_1;
+            4'd2:  current_bar_height = bar_height_2;
+            4'd3:  current_bar_height = bar_height_3;
+            4'd4:  current_bar_height = bar_height_4;
+            4'd5:  current_bar_height = bar_height_5;
+            4'd6:  current_bar_height = bar_height_6;
+            4'd7:  current_bar_height = bar_height_7;
+            4'd8:  current_bar_height = bar_height_8;
+            4'd9:  current_bar_height = bar_height_9;
+            4'd10: current_bar_height = bar_height_10;
+            4'd11: current_bar_height = bar_height_11;
+            4'd12: current_bar_height = bar_height_12;
+            4'd13: current_bar_height = bar_height_13;
+            4'd14: current_bar_height = bar_height_14;
+            4'd15: current_bar_height = bar_height_15;
             default: current_bar_height = 16'd0;
         endcase
     end
