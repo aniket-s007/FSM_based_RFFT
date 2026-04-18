@@ -90,7 +90,7 @@
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sources_1/imports/Code/bar_renderer.v">
-        <FileInfo>
+        <FileInfo RelPath="bar_renderer.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/bar_renderer.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -99,7 +99,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/clock_divider.v">
-        <FileInfo>
+        <FileInfo RelPath="clock_divider.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/clock_divider.v"/>
           <Attr Name="ImportTime" Val="1776016430"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -108,14 +108,14 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/font_rom.v">
-        <FileInfo>
+        <FileInfo RelPath="font_rom.v">
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/horizontal_counter.v">
-        <FileInfo>
+        <FileInfo RelPath="horizontal_counter.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/horizontal_counter.v"/>
           <Attr Name="ImportTime" Val="1776016432"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -124,7 +124,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/lfsr16.v">
-        <FileInfo>
+        <FileInfo RelPath="lfsr16.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/lfsr16.v"/>
           <Attr Name="ImportTime" Val="1775904320"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -133,7 +133,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/magnitude_approx.v">
-        <FileInfo>
+        <FileInfo RelPath="magnitude_approx.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/magnitude_approx.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -142,7 +142,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/rfft_demo_top.v">
-        <FileInfo>
+        <FileInfo RelPath="rfft_demo_top.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/rfft_demo_top.v"/>
           <Attr Name="ImportTime" Val="1775904412"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -151,7 +151,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/rfft_n16_simple.v">
-        <FileInfo>
+        <FileInfo RelPath="rfft_n16_simple.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/rfft_n16_simple.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -160,7 +160,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/test_signal_rom.v">
-        <FileInfo>
+        <FileInfo RelPath="test_signal_rom.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/test_signal_rom.v"/>
           <Attr Name="ImportTime" Val="1775727616"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -169,14 +169,14 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/text_overlay.v">
-        <FileInfo>
+        <FileInfo RelPath="text_overlay.v">
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/vertical_counter.v">
-        <FileInfo>
+        <FileInfo RelPath="vertical_counter.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/vertical_counter.v"/>
           <Attr Name="ImportTime" Val="1776016434"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -185,7 +185,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/vga_sync.v">
-        <FileInfo>
+        <FileInfo RelPath="vga_sync.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/vga_sync.v"/>
           <Attr Name="ImportTime" Val="1776016430"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -194,7 +194,7 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Code/fpga_top.v">
-        <FileInfo>
+        <FileInfo RelPath="fpga_top.v">
           <Attr Name="ImportPath" Val="$PPRDIR/../../College/Coding/FFT_project/FPGA_Course_RegisterBased/Code/fpga_top.v"/>
           <Attr Name="ImportTime" Val="1775904437"/>
           <Attr Name="UsedIn" Val="synthesis"/>

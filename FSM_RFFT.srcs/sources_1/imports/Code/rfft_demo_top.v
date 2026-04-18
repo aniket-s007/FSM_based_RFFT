@@ -46,7 +46,7 @@ module rfft_demo_top (
     input  wire        trigger,     // Connect to BTNC (active high)
     output wire        computing,   // LED indicator
     output wire        valid,       // LED indicator
-    // 9 bar heights for VGA (unsigned, higher = taller bar)
+    // 16 bar heights for VGA (unsigned, higher = taller bar)
     output reg  [15:0] bar_height_0,
     output reg  [15:0] bar_height_1,
     output reg  [15:0] bar_height_2,
@@ -55,7 +55,14 @@ module rfft_demo_top (
     output reg  [15:0] bar_height_5,
     output reg  [15:0] bar_height_6,
     output reg  [15:0] bar_height_7,
-    output reg  [15:0] bar_height_8
+    output reg  [15:0] bar_height_8,
+    output reg  [15:0] bar_height_9,
+    output reg  [15:0] bar_height_10,
+    output reg  [15:0] bar_height_11,
+    output reg  [15:0] bar_height_12,
+    output reg  [15:0] bar_height_13,
+    output reg  [15:0] bar_height_14,
+    output reg  [15:0] bar_height_15
 );
 
     //=========================================================================
@@ -118,9 +125,12 @@ module rfft_demo_top (
     wire               rfft_done;
     wire               rfft_busy;
 
-    wire signed [15:0] X0_re, X0_im, X1_re, X1_im, X2_re, X2_im;
-    wire signed [15:0] X3_re, X3_im, X4_re, X4_im, X5_re, X5_im;
-    wire signed [15:0] X6_re, X6_im, X7_re, X7_im, X8_re, X8_im;
+    wire signed [15:0] X0_re,  X0_im,  X1_re,  X1_im,  X2_re,  X2_im;
+    wire signed [15:0] X3_re,  X3_im,  X4_re,  X4_im,  X5_re,  X5_im;
+    wire signed [15:0] X6_re,  X6_im,  X7_re,  X7_im,  X8_re,  X8_im;
+    wire signed [15:0] X9_re,  X9_im,  X10_re, X10_im, X11_re, X11_im;
+    wire signed [15:0] X12_re, X12_im, X13_re, X13_im, X14_re, X14_im;
+    wire signed [15:0] X15_re, X15_im;
 
     rfft_n16_simple rfft_core (
         .clk(clk), .rst_n(rst_n),
@@ -128,27 +138,38 @@ module rfft_demo_top (
         .sample_valid(rfft_sample_valid),
         .start(rfft_start),
         .done(rfft_done), .busy(rfft_busy),
-        .X0_re(X0_re), .X0_im(X0_im), .X1_re(X1_re), .X1_im(X1_im),
-        .X2_re(X2_re), .X2_im(X2_im), .X3_re(X3_re), .X3_im(X3_im),
-        .X4_re(X4_re), .X4_im(X4_im), .X5_re(X5_re), .X5_im(X5_im),
-        .X6_re(X6_re), .X6_im(X6_im), .X7_re(X7_re), .X7_im(X7_im),
-        .X8_re(X8_re), .X8_im(X8_im)
+        .X0_re(X0_re),   .X0_im(X0_im),   .X1_re(X1_re),   .X1_im(X1_im),
+        .X2_re(X2_re),   .X2_im(X2_im),   .X3_re(X3_re),   .X3_im(X3_im),
+        .X4_re(X4_re),   .X4_im(X4_im),   .X5_re(X5_re),   .X5_im(X5_im),
+        .X6_re(X6_re),   .X6_im(X6_im),   .X7_re(X7_re),   .X7_im(X7_im),
+        .X8_re(X8_re),   .X8_im(X8_im),   .X9_re(X9_re),   .X9_im(X9_im),
+        .X10_re(X10_re), .X10_im(X10_im), .X11_re(X11_re), .X11_im(X11_im),
+        .X12_re(X12_re), .X12_im(X12_im), .X13_re(X13_re), .X13_im(X13_im),
+        .X14_re(X14_re), .X14_im(X14_im), .X15_re(X15_re), .X15_im(X15_im)
     );
 
     //=========================================================================
     // Magnitude computation (9 instances, one per bin)
     //=========================================================================
-    wire [15:0] mag0, mag1, mag2, mag3, mag4, mag5, mag6, mag7, mag8;
+    wire [15:0] mag0,  mag1,  mag2,  mag3,  mag4,  mag5,  mag6,  mag7;
+    wire [15:0] mag8,  mag9,  mag10, mag11, mag12, mag13, mag14, mag15;
 
-    magnitude_approx mag_inst0 (.re(X0_re), .im(X0_im), .mag(mag0));
-    magnitude_approx mag_inst1 (.re(X1_re), .im(X1_im), .mag(mag1));
-    magnitude_approx mag_inst2 (.re(X2_re), .im(X2_im), .mag(mag2));
-    magnitude_approx mag_inst3 (.re(X3_re), .im(X3_im), .mag(mag3));
-    magnitude_approx mag_inst4 (.re(X4_re), .im(X4_im), .mag(mag4));
-    magnitude_approx mag_inst5 (.re(X5_re), .im(X5_im), .mag(mag5));
-    magnitude_approx mag_inst6 (.re(X6_re), .im(X6_im), .mag(mag6));
-    magnitude_approx mag_inst7 (.re(X7_re), .im(X7_im), .mag(mag7));
-    magnitude_approx mag_inst8 (.re(X8_re), .im(X8_im), .mag(mag8));
+    magnitude_approx mag_inst0  (.re(X0_re),  .im(X0_im),  .mag(mag0));
+    magnitude_approx mag_inst1  (.re(X1_re),  .im(X1_im),  .mag(mag1));
+    magnitude_approx mag_inst2  (.re(X2_re),  .im(X2_im),  .mag(mag2));
+    magnitude_approx mag_inst3  (.re(X3_re),  .im(X3_im),  .mag(mag3));
+    magnitude_approx mag_inst4  (.re(X4_re),  .im(X4_im),  .mag(mag4));
+    magnitude_approx mag_inst5  (.re(X5_re),  .im(X5_im),  .mag(mag5));
+    magnitude_approx mag_inst6  (.re(X6_re),  .im(X6_im),  .mag(mag6));
+    magnitude_approx mag_inst7  (.re(X7_re),  .im(X7_im),  .mag(mag7));
+    magnitude_approx mag_inst8  (.re(X8_re),  .im(X8_im),  .mag(mag8));
+    magnitude_approx mag_inst9  (.re(X9_re),  .im(X9_im),  .mag(mag9));
+    magnitude_approx mag_inst10 (.re(X10_re), .im(X10_im), .mag(mag10));
+    magnitude_approx mag_inst11 (.re(X11_re), .im(X11_im), .mag(mag11));
+    magnitude_approx mag_inst12 (.re(X12_re), .im(X12_im), .mag(mag12));
+    magnitude_approx mag_inst13 (.re(X13_re), .im(X13_im), .mag(mag13));
+    magnitude_approx mag_inst14 (.re(X14_re), .im(X14_im), .mag(mag14));
+    magnitude_approx mag_inst15 (.re(X15_re), .im(X15_im), .mag(mag15));
 
     //=========================================================================
     // Control FSM
@@ -163,15 +184,10 @@ module rfft_demo_top (
             rfft_data_in      <= 0;
             rfft_sample_valid <= 0;
             rfft_start        <= 0;
-            bar_height_0      <= 0;
-            bar_height_1      <= 0;
-            bar_height_2      <= 0;
-            bar_height_3      <= 0;
-            bar_height_4      <= 0;
-            bar_height_5      <= 0;
-            bar_height_6      <= 0;
-            bar_height_7      <= 0;
-            bar_height_8      <= 0;
+            bar_height_0  <= 0; bar_height_1  <= 0; bar_height_2  <= 0; bar_height_3  <= 0;
+            bar_height_4  <= 0; bar_height_5  <= 0; bar_height_6  <= 0; bar_height_7  <= 0;
+            bar_height_8  <= 0; bar_height_9  <= 0; bar_height_10 <= 0; bar_height_11 <= 0;
+            bar_height_12 <= 0; bar_height_13 <= 0; bar_height_14 <= 0; bar_height_15 <= 0;
         end else begin
             rfft_sample_valid <= 0;
             rfft_start        <= 0;
@@ -195,16 +211,15 @@ module rfft_demo_top (
 
                 S_COMPUTING: begin
                     if (rfft_done) begin
-                        // Latch magnitudes
-                        bar_height_0 <= mag0;
-                        bar_height_1 <= mag1;
-                        bar_height_2 <= mag2;
-                        bar_height_3 <= mag3;
-                        bar_height_4 <= mag4;
-                        bar_height_5 <= mag5;
-                        bar_height_6 <= mag6;
-                        bar_height_7 <= mag7;
-                        bar_height_8 <= mag8;
+                        // Latch all 16 magnitudes
+                        bar_height_0  <= mag0;  bar_height_1  <= mag1;
+                        bar_height_2  <= mag2;  bar_height_3  <= mag3;
+                        bar_height_4  <= mag4;  bar_height_5  <= mag5;
+                        bar_height_6  <= mag6;  bar_height_7  <= mag7;
+                        bar_height_8  <= mag8;  bar_height_9  <= mag9;
+                        bar_height_10 <= mag10; bar_height_11 <= mag11;
+                        bar_height_12 <= mag12; bar_height_13 <= mag13;
+                        bar_height_14 <= mag14; bar_height_15 <= mag15;
                         state <= S_DONE;
                     end
                 end
