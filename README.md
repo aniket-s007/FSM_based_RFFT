@@ -7,7 +7,7 @@
 ![Tool](https://img.shields.io/badge/Vivado-2020.x%2B-red?style=for-the-badge)
 ![Board](https://img.shields.io/badge/Board-Nexys%204%20Rev%20B-green?style=for-the-badge)
 ![VGA](https://img.shields.io/badge/VGA-640×480%20%4060Hz-purple?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge)
+
 
 **Real-time N=16 FFT spectrum analyzer on an Artix-7 FPGA — live bar-graph display over VGA, Q1.15 fixed-point arithmetic, fully FSM-driven.**
 
