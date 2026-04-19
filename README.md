@@ -197,5 +197,3 @@ FSM_RFFT/
 Pull requests are welcome. For significant changes, open an issue first to discuss what you'd like to change. Please ensure any modified RTL is simulated and timing constraints remain met at 80 MHz.
 
 ---
-
-This project is licensed under the [MIT License](LICENSE).
