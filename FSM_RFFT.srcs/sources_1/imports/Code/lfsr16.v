@@ -40,10 +40,10 @@ module lfsr16 (
     always @(posedge clk) begin
         if (!rst_n)
             state <= SEED;
-        else if (advance)
-            state <= {state[14:0], feedback};
+        else if (advance)   
+            state <= {state[14:0], feedback};   
     end
 
     assign data_out = $signed(state);
-
+ 
 endmodule
