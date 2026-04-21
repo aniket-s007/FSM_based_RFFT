@@ -20,7 +20,7 @@
 
 | Name | GitHub |
 |------|--------|
-| Aniket Singh | [github.com/AniketSingh](https://github.com/AniketSingh) |
+| Aniket Singh | Github[github.com/AniketSingh](https://github.com/AniketSingh) |
 | Aryan Rastogi | [github.com/AryanRastogi72](https://github.com/AryanRastogi72) |
 | Rhythm Jain | [github.com/RhythmJain](https://github.com/RhythmJain) |
 | Yashika Jain | [github.com/YashikaJain](https://github.com/YashikaJain) |
