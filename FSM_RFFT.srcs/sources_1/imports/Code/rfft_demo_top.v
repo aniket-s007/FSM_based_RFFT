@@ -6,14 +6,14 @@
 // Top-level module for the RFFT course project demo.
 //
 // Architecture:
-//   [Test Signal ROM] → [N=16 RFFT] → [Magnitude] → [9 Bar Heights]
+//   [Test Signal ROM] → [N=16 RFFT] → [Magnitude] → [16 Bar Heights]
 //                ↑                                          ↓
 //          sig_sel (switches)                         [VGA Display]
 //
 // Operation:
 //   1. On trigger (button press or auto), loads 16 samples from ROM
 //   2. Computes N=16 FFT (~60 clock cycles)
-//   3. Computes magnitude of each of the 9 frequency bins
+//   3. Computes magnitude of each of the 16 frequency bins
 //   4. Stores magnitudes in output registers
 //   5. VGA module reads bar heights continuously
 //   6. Can re-trigger to update (or auto-repeat for continuous display)
@@ -74,11 +74,19 @@ module rfft_demo_top (
     localparam S_DONE    = 2'd3;
 
     reg [1:0] state;
-    reg [3:0] load_counter;
+    reg [3:0] load_counter; // Counts from 0 to 15 while loading samples
+   
+    // Edge detection for trigger button as button is active high and 
+    //we want to start loading on the rising edge ONLY, 
+    //not on every clock cycle while the button is held down.
 
-    // Edge detection for trigger button
-    reg trigger_prev;
-    wire trigger_rising = trigger & ~trigger_prev;
+    //convert a held button signal into a single-clock pulse.   
+    reg trigger_prev;   // Holds previous value of trigger
+    wire trigger_rising = trigger & ~trigger_prev;  // Rising edge detection logic, true only when trigger goes from 0 to 1 in clk 1 
+                                                    // and after clk 2 trigger_prev =1, 
+                                                    // thus created a SINGLE clock pulse starting rising edge of prev_trigger
+                                                    // pulse end at posedge clk 3
+
     always @(posedge clk) begin
         if (!rst_n) trigger_prev <= 0;
         else        trigger_prev <= trigger;
@@ -87,7 +95,7 @@ module rfft_demo_top (
     //=========================================================================
     // Test signal ROM
     //=========================================================================
-    wire signed [15:0] rom_data;
+    wire signed [15:0] rom_data;    // Q1.15 format sample from ROM based on sig_sel and load_counter
     test_signal_rom rom (
         .sig_sel (sig_sel),
         .addr    (load_counter),
@@ -103,8 +111,9 @@ module rfft_demo_top (
     // different (but deterministic) windows — useful for visually
     // confirming "this is random" on the board LEDs.
     //=========================================================================
-    wire signed [15:0] lfsr_data;
-    wire               lfsr_advance = (state == S_LOADING);
+    wire signed [15:0] lfsr_data;   // Q1.15 format sample from LFSR
+    
+    wire lfsr_advance = (state == S_LOADING);
 
     lfsr16 lfsr_inst (
         .clk      (clk),
