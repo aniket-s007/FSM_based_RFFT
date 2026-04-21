@@ -8,12 +8,22 @@
 ![Board](https://img.shields.io/badge/Board-Nexys%204%20Rev%20B-green?style=for-the-badge)
 ![VGA](https://img.shields.io/badge/VGA-640×480%20%4060Hz-purple?style=for-the-badge)
 
-
 **Real-time N=16 FFT spectrum analyzer on an Artix-7 FPGA — live bar-graph display over VGA, Q1.15 fixed-point arithmetic, fully FSM-driven.**
 
 [Features](#-features) · [Architecture](#-architecture) · [Source Files](#-source-files) · [Quick Start](#-quick-start) · [Usage](#-usage) · [Pinout](#-board-pinout) · [Fixed-Point Math](#-fixed-point-arithmetic)
 
 </div>
+
+---
+
+## 👥 Team
+
+| Name | GitHub |
+|------|--------|
+| Aniket Singh | [github.com/AniketSingh](https://github.com/AniketSingh) |
+| Aryan Rastogi | [github.com/AryanRastogi72](https://github.com/AryanRastogi72) |
+| Rhythm Jain | [github.com/RhythmJain](https://github.com/RhythmJain) |
+| Yashika Jain | [github.com/YashikaJain](https://github.com/YashikaJain) |
 
 ---
 
@@ -195,5 +205,3 @@ FSM_RFFT/
 ## 🤝 Contributing
 
 Pull requests are welcome. For significant changes, open an issue first to discuss what you'd like to change. Please ensure any modified RTL is simulated and timing constraints remain met at 80 MHz.
-
----
