@@ -37,17 +37,24 @@ module rfft_n16_simple (
     input  wire        start,          // Pulse to begin computation after loading
     output reg         done,           // High when results are ready
     output reg         busy,           // High during computation
-    // Output: 9 frequency bins (X[0] to X[8])
+    // Output: all 16 frequency bins (X[0] to X[15])
     // Each has real and imaginary parts
-    output wire signed [15:0] X0_re, X0_im,
-    output wire signed [15:0] X1_re, X1_im,
-    output wire signed [15:0] X2_re, X2_im,
-    output wire signed [15:0] X3_re, X3_im,
-    output wire signed [15:0] X4_re, X4_im,
-    output wire signed [15:0] X5_re, X5_im,
-    output wire signed [15:0] X6_re, X6_im,
-    output wire signed [15:0] X7_re, X7_im,
-    output wire signed [15:0] X8_re, X8_im
+    output wire signed [15:0] X0_re,  X0_im,
+    output wire signed [15:0] X1_re,  X1_im,
+    output wire signed [15:0] X2_re,  X2_im,
+    output wire signed [15:0] X3_re,  X3_im,
+    output wire signed [15:0] X4_re,  X4_im,
+    output wire signed [15:0] X5_re,  X5_im,
+    output wire signed [15:0] X6_re,  X6_im,
+    output wire signed [15:0] X7_re,  X7_im,
+    output wire signed [15:0] X8_re,  X8_im,
+    output wire signed [15:0] X9_re,  X9_im,
+    output wire signed [15:0] X10_re, X10_im,
+    output wire signed [15:0] X11_re, X11_im,
+    output wire signed [15:0] X12_re, X12_im,
+    output wire signed [15:0] X13_re, X13_im,
+    output wire signed [15:0] X14_re, X14_im,
+    output wire signed [15:0] X15_re, X15_im
 );
 
     //=========================================================================
@@ -453,14 +460,24 @@ module rfft_n16_simple (
     //   X[7] = re[14],im[14]  (7→14)
     //   X[8] = re[1],im[1]    (8→1)
     //=========================================================================
-    assign X0_re = re[0];   assign X0_im = im[0];
-    assign X1_re = re[8];   assign X1_im = im[8];
-    assign X2_re = re[4];   assign X2_im = im[4];
-    assign X3_re = re[12];  assign X3_im = im[12];
-    assign X4_re = re[2];   assign X4_im = im[2];
-    assign X5_re = re[10];  assign X5_im = im[10];
-    assign X6_re = re[6];   assign X6_im = im[6];
-    assign X7_re = re[14];  assign X7_im = im[14];
-    assign X8_re = re[1];   assign X8_im = im[1];
+    // Bit-reversal: k → bit_reverse_4bit(k)
+    //   0→0, 1→8, 2→4, 3→12, 4→2, 5→10, 6→6,  7→14
+    //   8→1, 9→9, 10→5, 11→13, 12→3, 13→11, 14→7, 15→15
+    assign X0_re  = re[0];   assign X0_im  = im[0];
+    assign X1_re  = re[8];   assign X1_im  = im[8];
+    assign X2_re  = re[4];   assign X2_im  = im[4];
+    assign X3_re  = re[12];  assign X3_im  = im[12];
+    assign X4_re  = re[2];   assign X4_im  = im[2];
+    assign X5_re  = re[10];  assign X5_im  = im[10];
+    assign X6_re  = re[6];   assign X6_im  = im[6];
+    assign X7_re  = re[14];  assign X7_im  = im[14];
+    assign X8_re  = re[1];   assign X8_im  = im[1];
+    assign X9_re  = re[9];   assign X9_im  = im[9];
+    assign X10_re = re[5];   assign X10_im = im[5];
+    assign X11_re = re[13];  assign X11_im = im[13];
+    assign X12_re = re[3];   assign X12_im = im[3];
+    assign X13_re = re[11];  assign X13_im = im[11];
+    assign X14_re = re[7];   assign X14_im = im[7];
+    assign X15_re = re[15];  assign X15_im = im[15];
 
 endmodule

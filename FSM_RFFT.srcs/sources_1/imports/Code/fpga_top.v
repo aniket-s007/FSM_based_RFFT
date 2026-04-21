@@ -45,20 +45,24 @@ module fpga_top (
     //=========================================================================
     // RFFT demo core
     //=========================================================================
-    wire [15:0] bar_height_0, bar_height_1, bar_height_2;
-    wire [15:0] bar_height_3, bar_height_4, bar_height_5;
-    wire [15:0] bar_height_6, bar_height_7, bar_height_8;
+    wire [15:0] bar_height_0,  bar_height_1,  bar_height_2,  bar_height_3;
+    wire [15:0] bar_height_4,  bar_height_5,  bar_height_6,  bar_height_7;
+    wire [15:0] bar_height_8,  bar_height_9,  bar_height_10, bar_height_11;
+    wire [15:0] bar_height_12, bar_height_13, bar_height_14, bar_height_15;
     wire        computing, valid;
 
     rfft_demo_top rfft_demo (
         .clk(clk), .rst_n(rst_n),
         .sig_sel(sig_sel), .sig_source(sig_source), .trigger(btnc),
         .computing(computing), .valid(valid),
-        .bar_height_0(bar_height_0), .bar_height_1(bar_height_1),
-        .bar_height_2(bar_height_2), .bar_height_3(bar_height_3),
-        .bar_height_4(bar_height_4), .bar_height_5(bar_height_5),
-        .bar_height_6(bar_height_6), .bar_height_7(bar_height_7),
-        .bar_height_8(bar_height_8)
+        .bar_height_0(bar_height_0),   .bar_height_1(bar_height_1),
+        .bar_height_2(bar_height_2),   .bar_height_3(bar_height_3),
+        .bar_height_4(bar_height_4),   .bar_height_5(bar_height_5),
+        .bar_height_6(bar_height_6),   .bar_height_7(bar_height_7),
+        .bar_height_8(bar_height_8),   .bar_height_9(bar_height_9),
+        .bar_height_10(bar_height_10), .bar_height_11(bar_height_11),
+        .bar_height_12(bar_height_12), .bar_height_13(bar_height_13),
+        .bar_height_14(bar_height_14), .bar_height_15(bar_height_15)
     );
 
     assign led_computing = computing;
@@ -104,12 +108,27 @@ module fpga_top (
     bar_renderer renderer (
         .h_count(h_count), .v_count(v_count),
         .video_active(video_active),
-        .bar_height_0(bar_height_0), .bar_height_1(bar_height_1),
-        .bar_height_2(bar_height_2), .bar_height_3(bar_height_3),
-        .bar_height_4(bar_height_4), .bar_height_5(bar_height_5),
-        .bar_height_6(bar_height_6), .bar_height_7(bar_height_7),
-        .bar_height_8(bar_height_8),
+        .bar_height_0(bar_height_0),   .bar_height_1(bar_height_1),
+        .bar_height_2(bar_height_2),   .bar_height_3(bar_height_3),
+        .bar_height_4(bar_height_4),   .bar_height_5(bar_height_5),
+        .bar_height_6(bar_height_6),   .bar_height_7(bar_height_7),
+        .bar_height_8(bar_height_8),   .bar_height_9(bar_height_9),
+        .bar_height_10(bar_height_10), .bar_height_11(bar_height_11),
+        .bar_height_12(bar_height_12), .bar_height_13(bar_height_13),
+        .bar_height_14(bar_height_14), .bar_height_15(bar_height_15),
         .vga_r(render_r), .vga_g(render_g), .vga_b(render_b)
+    );
+
+    //=========================================================================
+    // Text overlay (labels, bin numbers, magnitude ticks, axis titles)
+    //=========================================================================
+    wire [3:0] final_r, final_g, final_b;
+
+    text_overlay text_ovl (
+        .h_count(h_count), .v_count(v_count),
+        .video_active(video_active),
+        .bg_r(render_r), .bg_g(render_g), .bg_b(render_b),
+        .vga_r(final_r), .vga_g(final_g), .vga_b(final_b)
     );
 
     //=========================================================================
@@ -123,9 +142,9 @@ module fpga_top (
             vga_g_reg <= 4'h0;
             vga_b_reg <= 4'h0;
         end else if (pixel_tick) begin
-            vga_r_reg <= render_r;
-            vga_g_reg <= render_g;
-            vga_b_reg <= render_b;
+            vga_r_reg <= final_r;
+            vga_g_reg <= final_g;
+            vga_b_reg <= final_b;
         end
     end
 
