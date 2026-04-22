@@ -28,22 +28,20 @@ module lfsr16 (
     output wire signed [15:0] data_out
 );
 
-    localparam [15:0] SEED = 16'hACE1;
+    localparam [15:0] SEED = 16'hACE1;  // Non-zero value (can be any 16-bit value except 0)
 
     reg [15:0] state;
-
-    // Tap polynomial: x^16 + x^14 + x^13 + x^11 + 1
-    // Feedback bit is XOR of state[15], state[13], state[12], state[10]
-    // (zero-indexed, so state[15] is the tap at position "16").
-    wire feedback = state[15] ^ state[13] ^ state[12] ^ state[10];
+    
+    //  XOR of state[15], state[13], state[12], state[10]
+    wire feedback = state[15] ^ state[13] ^ state[12] ^ state[10];  // XOR of bits
 
     always @(posedge clk) begin
         if (!rst_n)
             state <= SEED;
-        else if (advance)   
-            state <= {state[14:0], feedback};   
+        else if (advance)   //advances exactly 16 times per capture, stays high until (state == S_LOADING)
+            state <= {state[14:0], feedback};   //shift left by 1 pos and insert feedback at LSB
     end
 
-    assign data_out = $signed(state);
- 
+    assign data_out = $signed(state);   // Reinterpret the 16-bit state as a signed Q1.15 value
+                                        // as demo top expects a signed value for the signal source
 endmodule
