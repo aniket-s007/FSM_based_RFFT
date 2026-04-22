@@ -120,32 +120,32 @@ module rfft_n16_simple (
     // Butterfly computation wires
     // We compute one butterfly pair per clock cycle.
     //=========================================================================
-    reg [3:0] bf_i1, bf_i2;  // Indices of butterfly pair
+    reg [3:0] bf_i1, bf_i2;  // Indices of butterfly pair upper and lower elements
     reg [3:0] tw_idx;        // Twiddle factor index
 
     // Scaled butterfly: (a+b)/2, (a-b)/2 using 17-bit intermediate
-    wire signed [16:0] sum_re  = {re[bf_i1][15], re[bf_i1]} + {re[bf_i2][15], re[bf_i2]};
+    wire signed [16:0] sum_re  = {re[bf_i1][15], re[bf_i1]} + {re[bf_i2][15], re[bf_i2]};   //sign extension to 17 bits for sum
     wire signed [16:0] diff_re = {re[bf_i1][15], re[bf_i1]} - {re[bf_i2][15], re[bf_i2]};
     wire signed [16:0] sum_im  = {im[bf_i1][15], im[bf_i1]} + {im[bf_i2][15], im[bf_i2]};
     wire signed [16:0] diff_im = {im[bf_i1][15], im[bf_i1]} - {im[bf_i2][15], im[bf_i2]};
 
-    wire signed [15:0] bf_sum_re  = sum_re[16:1];
+    wire signed [15:0] bf_sum_re  = sum_re[16:1];   // Divide by 2 
     wire signed [15:0] bf_diff_re = diff_re[16:1];
     wire signed [15:0] bf_sum_im  = sum_im[16:1];
     wire signed [15:0] bf_diff_im = diff_im[16:1];
 
     // Twiddle multiplication: (a+jb) * (cos-jsin)
-    // real = a*cos + b*sin, imag = b*cos - a*sin
+    // real = a*cos + b*sin, imag = b*cos - a*sin   ie.  a*cos + b*sin + j(b*cos − a*sin)
     wire signed [15:0] cos_val = tw_cos(tw_idx);
     wire signed [15:0] sin_val = tw_sin(tw_idx);
 
-    wire signed [31:0] tw_prod_ac = re[bf_i2] * cos_val;
-    wire signed [31:0] tw_prod_bs = im[bf_i2] * sin_val;
+    wire signed [31:0] tw_prod_ac = re[bf_i2] * cos_val;    //multiplying caused 32-bit
+    wire signed [31:0] tw_prod_bs = im[bf_i2] * sin_val;    //Q1.15 * Q1.15 >> 15
     wire signed [31:0] tw_prod_bc = im[bf_i2] * cos_val;
     wire signed [31:0] tw_prod_as = re[bf_i2] * sin_val;
-
-    wire signed [15:0] tw_re = tw_prod_ac[30:15] + tw_prod_bs[30:15];
-    wire signed [15:0] tw_im = tw_prod_bc[30:15] - tw_prod_as[30:15];
+                                                                        //
+    wire signed [15:0] tw_re = tw_prod_ac[30:15] + tw_prod_bs[30:15];   //Extract higher [30:15] to Get Back to Q1.15
+    wire signed [15:0] tw_im = tw_prod_bc[30:15] - tw_prod_as[30:15];   // real = a*cos + b*sin, imag = b*cos - a*sin
 
     //=========================================================================
     // Main FSM
@@ -173,21 +173,21 @@ module rfft_n16_simple (
                     done <= 0;
                     busy <= 0;
                     if (sample_valid) begin
-                        re[0]    <= data_in;
-                        im[0]    <= 16'sd0;
-                        load_idx <= 4'd1;
+                        re[0]    <= data_in;    //saves one clk
+                        im[0]    <= 16'sd0;     //saves one clk
+                        load_idx <= 4'd1;       //1 value is loaded, count = 1
                         state    <= S_LOAD;
-                        busy     <= 1;
+                        busy     <= 1;          //fft computation ongoing, busy = 1
                     end
                 end
 
                 S_LOAD: begin
                     if (sample_valid) begin
                         re[load_idx] <= data_in;
-                        im[load_idx] <= 16'sd0;
-                        if (load_idx == 4'd15) begin
+                        im[load_idx] <= 16'sd0;         // Initialize imaginary part to 0 for real input
+                        if (load_idx == 4'd15) begin    // After loading 16 samples, move to stage 1
                             state    <= S_STAGE1;
-                            sub_step <= 0;
+                            sub_step <= 0;              // Reset sub-step counter for stage 1
                         end else begin
                             load_idx <= load_idx + 4'd1;
                         end
@@ -202,24 +202,24 @@ module rfft_n16_simple (
                 S_STAGE1: begin
                     if (sub_step <= 4'd8) begin
                         // Butterfly phase: 8 pairs (0..7 with 8..15)
-                        bf_i1 <= sub_step[3:0];
-                        bf_i2 <= sub_step[3:0] + 4'd8;
-                        if (sub_step > 0) begin
-                            re[bf_i1] <= bf_sum_re;
-                            re[bf_i2] <= bf_diff_re;
+                        bf_i1 <= sub_step[3:0];         // Upper index: 0..7
+                        bf_i2 <= sub_step[3:0] + 4'd8;  // Lower index: 8..15
+                        if (sub_step > 0) begin         //first case 0,8 and sub_step=1
+                            re[bf_i1] <= bf_sum_re;     //(re[0] + re[8])/2
+                            re[bf_i2] <= bf_diff_re;    //(re[0] - re[8])/2
                         end
                         if (sub_step == 4'd8) begin
                             // Start twiddle phase
                             // idx 8: W^0 is trivial, skip. Start with idx 9: W^1
-                            bf_i2 <= 4'd9; tw_idx <= 4'd1;
-                        end
+                            bf_i2 <= 4'd9; tw_idx <= 4'd1;      //at sub_step 8, bf_i2 is 9, tw_idx is 1
+                        end                                     //then sub_step + 1 = 9
                         sub_step <= sub_step + 1;
                     end else begin
                         // Twiddle phase: W^k on indices 9..15
                         // sub_step 9: apply W^1 to idx 9 (read from prev cycle)
                         // sub_step 10: apply W^2 to idx 10, write W^1 result
                         // etc.
-                        case (sub_step)
+                        case (sub_step)     //after adding/subracting, now twiddle calulations start at subration index 9, tw_idx 1
                             9: begin
                                 re[4'd9] <= tw_re; im[4'd9] <= tw_im;
                                 bf_i2 <= 4'd10; tw_idx <= 4'd2;
@@ -269,9 +269,9 @@ module rfft_n16_simple (
                 S_STAGE2: begin
                     case (sub_step)
                         // Butterfly phase: 8 pairs (now handling both re and im)
-                        0: begin bf_i1<=4'd0;  bf_i2<=4'd4;  sub_step<=1; end
-                        1: begin bf_i1<=4'd1;  bf_i2<=4'd5;
-                           re[4'd0]<=bf_sum_re; re[4'd4]<=bf_diff_re;
+                        0: begin bf_i1<=4'd0;  bf_i2<=4'd4;  sub_step<=1; end           //initial setup (see next line for 0,4 butterfly)
+                        1: begin bf_i1<=4'd1;  bf_i2<=4'd5;                             //setup bf for next stage
+                           re[4'd0]<=bf_sum_re; re[4'd4]<=bf_diff_re;                   //(re[0] + re[8])/2 and subtraction as well
                            im[4'd0]<=bf_sum_im; im[4'd4]<=bf_diff_im; sub_step<=2; end
                         2: begin bf_i1<=4'd2;  bf_i2<=4'd6;
                            re[4'd1]<=bf_sum_re; re[4'd5]<=bf_diff_re;
@@ -293,27 +293,27 @@ module rfft_n16_simple (
                            im[4'd10]<=bf_sum_im; im[4'd14]<=bf_diff_im; sub_step<=8; end
                         8: begin
                             re[4'd11]<=bf_sum_re; re[4'd15]<=bf_diff_re;
-                            im[4'd11]<=bf_sum_im; im[4'd15]<=bf_diff_im;
-                            bf_i2 <= 4'd5; tw_idx <= 4'd2;
-                            sub_step<=9;
-                        end
+                            im[4'd11]<=bf_sum_im; im[4'd15]<=bf_diff_im;    //all add and sub of stage 2 done 
+                            bf_i2 <= 4'd5; tw_idx <= 4'd2;                  //proceeding with twiddle multiplication for stage 2
+                            sub_step<=9;                                    // SKIPPED W^0 for index 4, 12 
+                        end 
                         9: begin
-                            re[4'd5] <= tw_re; im[4'd5] <= tw_im;
+                            re[4'd5] <= tw_re; im[4'd5] <= tw_im;           // rotate index 5  by W^2
                             bf_i2 <= 4'd6; tw_idx <= 4'd4;
                             sub_step<=10;
                         end
                         10: begin
-                            re[4'd6] <= tw_re; im[4'd6] <= tw_im;
+                            re[4'd6] <= tw_re; im[4'd6] <= tw_im;           //rotate index 6  by W^4
                             bf_i2 <= 4'd7; tw_idx <= 4'd6;
                             sub_step<=11;
                         end
                         11: begin
-                            re[4'd7] <= tw_re; im[4'd7] <= tw_im;
+                            re[4'd7] <= tw_re; im[4'd7] <= tw_im;           //rotate index 7  by W^6
                             bf_i2 <= 4'd13; tw_idx <= 4'd2;
                             sub_step<=12;
-                        end
+                        end                                                 // leaving gap from 7 to 13 as they are addition
                         12: begin
-                            re[4'd13] <= tw_re; im[4'd13] <= tw_im;
+                            re[4'd13] <= tw_re; im[4'd13] <= tw_im;         //rotate index 13 by W^2
                             bf_i2 <= 4'd14; tw_idx <= 4'd4;
                             sub_step<=13;
                         end
@@ -338,7 +338,7 @@ module rfft_n16_simple (
                 // ===========================================================
                 S_STAGE3: begin
                     case (sub_step)
-                        0:  begin bf_i1<=4'd0;  bf_i2<=4'd2;  sub_step<=1; end
+                        0:  begin bf_i1<=4'd0;  bf_i2<=4'd2;  sub_step<=1; end            // same as stage 2, just different pairs
                         1:  begin bf_i1<=4'd1;  bf_i2<=4'd3;
                             re[4'd0]<=bf_sum_re; re[4'd2]<=bf_diff_re;
                             im[4'd0]<=bf_sum_im; im[4'd2]<=bf_diff_im; sub_step<=2; end
@@ -364,8 +364,8 @@ module rfft_n16_simple (
                             re[4'd13]<=bf_sum_re; re[4'd15]<=bf_diff_re;
                             im[4'd13]<=bf_sum_im; im[4'd15]<=bf_diff_im;
                             bf_i2 <= 4'd3; tw_idx <= 4'd4;
-                            sub_step<=9;
-                        end
+                            sub_step<=9;                                                    //twiddle phase for stage 3, skip W^0 for 
+                        end                                                                 //index 2, 6, 10, 14 and apply W^4 to indices 3,7,11,15
                         9:  begin
                             re[4'd3] <= tw_re; im[4'd3] <= tw_im;
                             bf_i2 <= 4'd7; tw_idx <= 4'd4;
@@ -422,7 +422,7 @@ module rfft_n16_simple (
                            re[4'd14]<=bf_sum_re; re[4'd15]<=bf_diff_re;
                            im[4'd14]<=bf_sum_im; im[4'd15]<=bf_diff_im;
                            state <= S_DONE;
-                        end
+                        end                                          // No Twiddle multiplication in stage 4, just butterfly computations
                         default: sub_step <= 0;
                     endcase
                 end
@@ -447,22 +447,9 @@ module rfft_n16_simple (
     // Bit-reversal of 4-bit index:
     //   0(0000)→0, 1(0001)→8, 2(0010)→4, 3(0011)→12,
     //   4(0100)→2, 5(0101)→10, 6(0110)→6, 7(0111)→14,
-    //   8(1000)→1, ...
-    //
-    // X[k] = data at bit_reversed(k):
-    //   X[0] = re[0],im[0]    (0→0)
-    //   X[1] = re[8],im[8]    (1→8)
-    //   X[2] = re[4],im[4]    (2→4)
-    //   X[3] = re[12],im[12]  (3→12)
-    //   X[4] = re[2],im[2]    (4→2)
-    //   X[5] = re[10],im[10]  (5→10)
-    //   X[6] = re[6],im[6]    (6→6)
-    //   X[7] = re[14],im[14]  (7→14)
-    //   X[8] = re[1],im[1]    (8→1)
+    //   8(1000)→1, 9→9, 10→5, 11→13, 12→3, 13→11, 14→7, 15→15
     //=========================================================================
-    // Bit-reversal: k → bit_reverse_4bit(k)
-    //   0→0, 1→8, 2→4, 3→12, 4→2, 5→10, 6→6,  7→14
-    //   8→1, 9→9, 10→5, 11→13, 12→3, 13→11, 14→7, 15→15
+    
     assign X0_re  = re[0];   assign X0_im  = im[0];
     assign X1_re  = re[8];   assign X1_im  = im[8];
     assign X2_re  = re[4];   assign X2_im  = im[4];

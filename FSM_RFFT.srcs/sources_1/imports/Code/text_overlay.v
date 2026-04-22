@@ -179,12 +179,7 @@ module text_overlay (
     wire [2:0] tick_row = in_tick0 ? t0_row : in_tick1 ? t1_row : t2_row;
     wire [2:0] tick_col = in_tick0 ? t0_col : in_tick1 ? t1_col : t2_col;
 
-    //=========================================================================
-    // Region D: Tick dashes — x=40..43 at each tick v_count
-    //=========================================================================
-    wire is_tick_dash = (h_count >= 10'd40) && (h_count <= 10'd43)
-                     && (v_count == T0_V || v_count == T1_V || v_count == T2_V
-                      || v_count == T3_V || v_count == T4_V || v_count == T5_V);
+    
 
     //=========================================================================
     // Region E: Bin numbers — y=452..459
@@ -307,8 +302,6 @@ module text_overlay (
     always @(*) begin
         if (!video_active) begin
             vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'h0;
-        end else if (is_tick_dash) begin
-            vga_r = 4'h3; vga_g = 4'h3; vga_b = 4'h3;
         end else if (in_any_text && pixel_on) begin
             if (in_title || in_any_bin) begin
                 vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'hF; // white

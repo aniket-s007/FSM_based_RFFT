@@ -71,13 +71,10 @@ module fpga_top (
     //=========================================================================
     // LED bin indicators
     // Each LED lights up if the bin magnitude exceeds threshold.
-    // With 1/16 RFFT scaling, real signal bins are typically >1000.
-    // Threshold of 512 filters out rounding noise while catching
-    // any bin with actual signal energy.
     //=========================================================================
     localparam LED_THRESH = 16'd512;
 
-    assign led_bins[0] = valid & (bar_height_0 > LED_THRESH);
+    assign led_bins[0] = valid & (bar_height_0 > LED_THRESH);   //for debugging
     assign led_bins[1] = valid & (bar_height_1 > LED_THRESH);
     assign led_bins[2] = valid & (bar_height_2 > LED_THRESH);
     assign led_bins[3] = valid & (bar_height_3 > LED_THRESH);

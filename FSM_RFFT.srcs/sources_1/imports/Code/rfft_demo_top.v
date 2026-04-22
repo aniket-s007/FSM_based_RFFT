@@ -112,14 +112,14 @@ module rfft_demo_top (
     // confirming "this is random" on the board LEDs.
     //=========================================================================
     wire signed [15:0] lfsr_data;   // Q1.15 format sample from LFSR
-    
+
     wire lfsr_advance = (state == S_LOADING);
 
     lfsr16 lfsr_inst (
         .clk      (clk),
         .rst_n    (rst_n),
         .advance  (lfsr_advance),
-        .data_out (lfsr_data)
+        .data_out (lfsr_data)   // Q1.15 format sample from LFSR runs 16 times until S_LOADING is done 
     );
 
     // Mux between ROM and LFSR for the FFT input stream.
@@ -212,7 +212,7 @@ module rfft_demo_top (
                 S_LOADING: begin
                     rfft_data_in      <= source_data;
                     rfft_sample_valid <= 1;
-                    load_counter      <= load_counter + 1;
+                    load_counter      <= load_counter + 1;  //loads from rom, 0 to 15
                     if (load_counter == 4'd15) begin
                         state <= S_COMPUTING;
                     end
