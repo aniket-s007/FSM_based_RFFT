@@ -22,8 +22,8 @@
 |------|--------|
 | Aniket Singh | [Github](https://github.com/aniket-s007) |
 | Aryan Rastogi | [Github](https://github.com/AryanRastogi72) |
-| Rhythm Jain | [Github](https://github.com) |
-| Yashika Jain | [Github](https://github.com) |
+| Rhythm Jain | [Github](https://github.com/Rhythmjain12) |
+| Yashika Jain | [Github](https://github.com/FerrisWheelly) |
 
 ---
 
